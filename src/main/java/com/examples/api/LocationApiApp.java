@@ -36,16 +36,15 @@ public class LocationApiApp extends Application<LocationApiConfiguration> {
 
     @Override
     public void run(LocationApiConfiguration locationApiConfiguration, final Environment environment) throws Exception {
-        LOGGER.info("Method App#run() called");
-        System.out.println("Hello world, by Dropwizard!");
-        System.out.println("Location API: " + locationApiConfiguration.getGoEuroApi());
-        System.out.println("jersey details: "+ locationApiConfiguration.getJerseyClientConfiguration().getWorkQueueSize());
+        LOGGER.info("Running location API..");
+        LOGGER.info("Location API: ", locationApiConfiguration.getGoEuroApi());
+        LOGGER.info("Jersey details: ", locationApiConfiguration.getJerseyClientConfiguration().getWorkQueueSize());
 
         final Client client = new JerseyClientBuilder(environment).using(locationApiConfiguration.getJerseyClientConfiguration())
                 .build(getName());
         final LocClientHealthCheck healthCheck = new LocClientHealthCheck(locationApiConfiguration.getVersion());
         environment.jersey().register(new ClientResource(locationApiConfiguration.getGoEuroApi(), client));
-        environment.healthChecks().register("template", healthCheck);
+        environment.healthChecks().register("location-api-healthcheck", healthCheck);
         environment.jersey().register(healthCheck);
     }
 }
