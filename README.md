@@ -1,6 +1,6 @@
 # location-api
 
-#Steps to run
+Steps to run
 
 1) Do "mvn clean package"
 
